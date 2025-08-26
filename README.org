@@ -1,0 +1,53 @@
+* Git Submodules Workflow
+
+** 1. Clone repository with submodules
+#+BEGIN_SRC shell
+git clone --recurse-submodules git@github.com:hyperavtr/nixdots.git
+#+END_SRC
+
+** 2. Removing a submodule locally
+#+BEGIN_SRC shell
+git submodule deinit -f -- assets
+rm -rf .git/modules/assets
+git rm -rf --cached assets
+#+END_SRC
+
+** 3. Update content inside the submodule
+Update the content in your submodule directory (~/.nixos-assets/).
+
+#+BEGIN_SRC shell
+cd ~/.nixos-assets  # This is your submodule repo
+git add .
+git commit -m "Updated content in the submodule"
+git push origin main  # Assuming 'main' branch
+#+END_SRC
+
+** 4. Update the submodule in the parent repository
+After updating content in the submodule, update the parent repo (~/.nixos/).
+
+#+BEGIN_SRC shell
+cd ~/.nixos  # Parent repository
+git submodule update --remote --merge
+#+END_SRC
+
+Now commit the updated submodule reference:
+
+#+BEGIN_SRC shell
+git add assets  # The submodule path
+git commit -m "Update submodule 'assets' to latest commit"
+git push origin main
+#+END_SRC
+
+** 5. Verify submodule status
+#+BEGIN_SRC shell
+git submodule status
+#+END_SRC
+
+This should show the commit hash of the submodule pointing to the latest commit.
+
+** 6. Reset NixOS config in /etc/nixos
+#+BEGIN_SRC shell
+sudo git -C /etc/nixos reset --hard home/main
+#+END_SRC
+
+This resets `/etc/nixos` to the state of the `main` branch from the `home` remote, which points to `/home/avtr/.nixos/`.
