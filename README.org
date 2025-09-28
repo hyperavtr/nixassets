@@ -34,7 +34,7 @@ Now commit the updated submodule reference:
 
 #+BEGIN_SRC shell
 git add assets  # The submodule path
-git commit -m "Update submodule 'assets' to latest commit"
+git commit -m "Updated submodule 'assets' to latest commit"
 git push origin main
 #+END_SRC
 
